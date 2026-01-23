@@ -33,7 +33,7 @@ class Character:
         
     def show_stat(self):
         return (
-            f"Name : {self.name}\t"f"Hp   : {self.hp}\n"
+            f"Name : {self.name}\t"f"Hp  : {self.hp}\n"
             f"Str  : {self.str}\t"f"Mag  : {self.mag}\n"
             f"Skl  : {self.skl}\t"f"Spd  : {self.spd}\n"
             f"Lck  : {self.lck}\t"f"Def  : {self.def_}\n"
