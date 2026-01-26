@@ -1,6 +1,7 @@
 from entities.character import Character
 from skills.skill_lists import Skill_registry
 from weapons.weapon_types import WeaponType
+from combat.faction_phase import Faction
 
 class Myrmidon(Character):
     ALLOWED_SKILLS = [
@@ -11,13 +12,15 @@ class Myrmidon(Character):
         WeaponType.SWORD
         ]
     
-    def __init__(self, name, symbol):
-        super().__init__(name,symbol,
+    def __init__(self, name, symbol, faction):
+        super().__init__(name,symbol, 
+                         faction, has_acted=False,
                          hp=16, max_hp=16,
                          str=5, mag=0,
                          skl=9, spd=10,
                          lck=6, def_=4,
-                         res=1, mov=6,)
+                         res=1, mov=6,
+                         )
         self.level = 1
         self.exp = 0
         self.exp_to_next = 100

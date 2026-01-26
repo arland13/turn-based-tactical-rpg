@@ -1,3 +1,6 @@
+from combat.battle import BattleSystem
+from combat.faction_phase import Faction
+
 class Tile:
     def __init__(self):
         self.unit = None
@@ -105,11 +108,31 @@ class Grid:
             if unit is attacker:
                 continue
 
+            # 🔑 FACTION CHECK
+            if unit.faction == attacker.faction:
+                continue
+
             distance = abs(ar - ur) + abs(ac - uc)
             if weapon.min_range <= distance <= weapon.max_range:
                 targets.append(unit)
 
         return targets
+    
+    def reset_phase_units(self, faction):
+        for unit in self.unit_positions:
+            if unit.faction == faction:
+                unit.has_acted = False
+
+    def enemy_phase(self):
+        for unit in self.unit_positions:
+            if unit.faction != Faction.ENEMY:
+                continue
+
+            enemies = self.get_enemies_in_range(unit, unit.weapon)
+            if enemies:
+                BattleSystem.battle(unit, enemies[0])
+
+
     
 
 

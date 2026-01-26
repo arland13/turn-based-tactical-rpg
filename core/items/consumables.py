@@ -10,7 +10,7 @@ class HealingItem(Item):
         if self.uses <= 0:
             raise ValueError("No uses left")
 
-        healed = min(self.heal_amount, target.hp_max - target.hp)
+        healed = min(self.heal_amount, target.max_hp - target.hp)
         target.hp += healed
         self.uses -= 1
 

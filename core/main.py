@@ -2,51 +2,59 @@ from entities.classes import Myrmidon
 from skills.skill_lists import Skill_registry
 from maps.grid import Grid
 from weapons.weapon_lists import WeaponRegistry
-from combat.battle import BattleSystem
+from combat.faction_phase import Phase, Faction, PhaseManager
+import player_phase as pp, enemy_phase as ep
 
 # ======================
 # DEMO / TEST
 # ======================
 
+def ask_int(prompt):
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("please input number!")
+
 if __name__ == "__main__":
-    hero = Myrmidon("Aldo", "A")
-    print(hero.show_stat())
-    enemy = Myrmidon("Rika", "R")
+    hero1 = Myrmidon("Aldo", "A", Faction.PLAYER)
+    print(hero1.show_stat())
+
+    hero2 = Myrmidon("Rika", "R", Faction.PLAYER)
+    enemy2 = Myrmidon("Indah", "I", Faction.ENEMY)
+    enemy3 = Myrmidon("Silvia", "S", Faction.ENEMY)
+
     weapon = WeaponRegistry()
     skill = Skill_registry
-    hero.equip_weapon(weapon.iron_sword)
-    hero.equip_class_skill(skill.ASTRA)
-    enemy.equip_weapon(weapon.iron_sword)
-    enemy.equip_class_skill(skill.ASTRA)
-    
-   
+
+    hero1.equip_weapon(weapon.iron_sword)
+    hero1.equip_class_skill(skill.ASTRA)
+
+    hero2.equip_weapon(weapon.iron_sword)
+    hero2.equip_class_skill(skill.ASTRA)
+
+    enemy2.equip_weapon(weapon.iron_sword)
+    enemy2.equip_class_skill(skill.ASTRA)
+
+    enemy3.equip_weapon(weapon.iron_sword)
+    enemy3.equip_class_skill(skill.ASTRA)
     grid = Grid(10, 10)
-    grid.place_unit(4, 4, hero)
-    grid.place_unit(1, 6, enemy)
+    grid.place_unit(4, 4, hero1)
+    grid.place_unit(1, 6, hero2)
+    grid.place_unit(2, 7, enemy2)
+    grid.place_unit(3, 6, enemy3)
+    phase_manager = PhaseManager()
     
     while True:
-            
-        print("\nMovement range for Aldo:")
-        movable = grid.get_movable_tiles(hero)
-        grid.render(highlight=movable)
-        command1, command2 = map(int, input("Enter column and row (e.g. 3 5): ").split())
+        print(phase_manager)
 
-        print(f"\nMove Aldo to ({command2}, {command1})\n")
-        grid.move_unit(hero, command2, command1)
-        grid.render()
-        
-        # --- AUTO COMBAT CHECK ---
-        enemies = grid.get_enemies_in_range(hero, hero.weapon)
+        if phase_manager.current_phase == Phase.PLAYER:
+            pp.player_phase(grid)
+            phase_manager.next_phase()
 
-        if enemies:
-            print("\nEnemies in range:")
-            for i, enemy in enumerate(enemies, 1):
-                print(f"{i}. {enemy.name}")
+        elif phase_manager.current_phase == Phase.ENEMY:
+            ep.enemy_phase(grid)
+            phase_manager.next_phase()
 
-            # Auto-pick first enemy (later: player choice)
-            target = enemies[0]
-
-            print(f"\n{hero.name} engages {target.name}!")
-            BattleSystem.battle(hero, target)
         else:
-            print("\nNo enemies in range.")
+            phase_manager.next_phase()

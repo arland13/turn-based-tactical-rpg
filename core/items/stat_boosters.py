@@ -11,5 +11,5 @@ class StatBooster(Item):
             raise ValueError(f"{target.name} has no stat {self.stat}")
 
         setattr(target, self.stat, getattr(target, self.stat) + self.amount)
-        print(f"{target.name}'s {self.stat.upper()} increased by {self.amount}")
+        print(f"{target.name}'s {self.stat.upper()} increased by {self.amount} permanently!")
         return True

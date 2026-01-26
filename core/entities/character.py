@@ -3,6 +3,8 @@ class Character:
         self,
         name,
         symbol,
+        faction,
+        has_acted,
         hp,
         max_hp,
         str,
@@ -12,7 +14,7 @@ class Character:
         lck,
         def_,
         res,
-        mov
+        mov,
     ):
         self.name = name
         self.symbol = symbol
@@ -26,6 +28,8 @@ class Character:
         self.def_ = def_
         self.res = res
         self.mov = mov
+        self.has_acted = has_acted
+        self.faction = faction
         
         self.skills = []
         self.inventory = []
