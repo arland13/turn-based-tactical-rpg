@@ -1,11 +1,48 @@
 from combat.battle import BattleSystem
 
+def manhattan(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+def find_closest_enemy(unit, grid):
+    ux, uy = grid.unit_positions[unit]
+
+    enemies = [
+        u for u in grid.unit_positions
+        if u.faction != unit.faction
+    ]
+
+    if not enemies:
+        return None
+
+    enemies.sort(
+        key=lambda e: manhattan(
+            (ux, uy),
+            grid.unit_positions[e]
+        )
+    )
+    return enemies[0]
+
+def move_towards(unit, target, grid):
+    ux, uy = grid.unit_positions[unit]
+    tx, ty = grid.unit_positions[target]
+
+    movable_tiles = grid.get_movable_tiles(unit)
+
+    # Choose tile that minimizes distance to target
+    best_tile = min(
+        movable_tiles,
+        key=lambda t: abs(t[0] - tx) + abs(t[1] - ty)
+    )
+
+    grid.move_unit(unit, best_tile[0], best_tile[1])
+
 def player_action_menu(unit, grid):
     while True:
         print("\nChoose action:")
         print("1. Attack")
         print("2. Use Item")
         print("3. Wait")
+        print("4. Show Stat")
 
         choice = input("> ")
 
@@ -26,24 +63,25 @@ def player_action_menu(unit, grid):
                 print("Invalid target.")
                 continue
 
-            BattleSystem.battle(unit, target)
-            return
+            result = BattleSystem.battle(unit, target)
+            if result:
+                grid.unit_lose(result)
+
+            return  # action ends here
 
         elif choice == "2":
             if not unit.inventory:
                 print("No items.")
+            else:
+                print(f"\n{unit.show_items()}")
                 continue
-
-            for i, item in enumerate(unit.inventory):
-                print(f"{i+1}. {item.name}")
-
-            try:
-                idx = int(input("Choose item: ")) - 1
-                unit.use_item(unit.inventory[idx])
-                return
-            except Exception as e:
-                print(e)
-
+        
         elif choice == "3":
             print(f"{unit.name} waits.")
             return
+        
+        elif choice == "4":
+            print(f"\n{unit.show_stat()}")
+
+        else:
+            print("Invalid choice.")

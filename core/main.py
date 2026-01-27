@@ -3,7 +3,8 @@ from skills.skill_lists import Skill_registry
 from maps.grid import Grid
 from weapons.weapon_lists import WeaponRegistry
 from combat.faction_phase import Phase, Faction, PhaseManager
-import player_phase as pp, enemy_phase as ep
+from items.promotion_items import MasterSeal
+import player_phase as pp, ai_phase as ap
 
 # ======================
 # DEMO / TEST
@@ -17,11 +18,20 @@ def ask_int(prompt):
             print("please input number!")
 
 if __name__ == "__main__":
+    master_seal = MasterSeal()
     hero1 = Myrmidon("Aldo", "A", Faction.PLAYER)
     print(hero1.show_stat())
+    hero1.gain_exp(2500)
+    print(hero1.show_stat())
+    hero1.add_item(master_seal)
+    hero1.use_item(master_seal)
+    print(hero1.show_stat())
 
-    hero2 = Myrmidon("Rika", "R", Faction.PLAYER)
-    enemy2 = Myrmidon("Indah", "I", Faction.ENEMY)
+    hero2 = Myrmidon("Rika", "R", Faction.PLAYER, level= 10)
+    print(f"\n{hero2.show_stat()}")
+
+    enemy2 = Myrmidon("Indah", "I", Faction.ENEMY, level=10)
+    print(f"\n{enemy2.show_stat()}")
     enemy3 = Myrmidon("Silvia", "S", Faction.ENEMY)
 
     weapon = WeaponRegistry()
@@ -53,8 +63,9 @@ if __name__ == "__main__":
             phase_manager.next_phase()
 
         elif phase_manager.current_phase == Phase.ENEMY:
-            ep.enemy_phase(grid)
+            ap.ai_phase(grid, Faction.ENEMY)
             phase_manager.next_phase()
 
-        else:
+        elif phase_manager.current_phase == Phase.ALLY:
+            ap.ai_phase(grid, Faction.ALLY)
             phase_manager.next_phase()

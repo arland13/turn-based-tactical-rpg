@@ -32,7 +32,7 @@ class BattleSystem:
             dmg *= 3
             print("Critical Hit!")
 
-        defender.hp -= dmg
+        defender.hp = max(0, (defender.hp - dmg))
         print(f"{defender.name} takes {dmg} damage (HP: {defender.hp})")
 
     @staticmethod
@@ -44,24 +44,34 @@ class BattleSystem:
         ):
             print("Vantage activated!")
             BattleSystem.attack(defender, attacker)
-            if attacker.hp <= 0:
-                return
+            if attacker.hp == 0:
+                print(f"{attacker.name} defeated!")
+                return attacker
 
-        # Normal combat
+        # Normal attack
         BattleSystem.attack(attacker, defender)
-        if defender.hp <= 0:
+
+        if defender.hp == 0:
             print(f"{defender.name} defeated!")
-            return
+            attacker.gain_exp(40)  # 🔥 kill EXP
+            return defender
 
+        # Counterattack
         BattleSystem.attack(defender, attacker)
-        if attacker.hp <= 0:
+        if attacker.hp == 0:
             print(f"{attacker.name} defeated!")
-            return
+            defender.gain_exp(40)
+            return attacker
 
-        # FOLLOW-UP ATTACK
-        atk_as = attacker.spd
-        def_as = defender.spd
-
-        if atk_as - def_as >= 4:
+        # Follow-up
+        if attacker.spd - defender.spd >= 4:
             print("Follow-up attack!")
             BattleSystem.attack(attacker, defender)
+            if defender.hp == 0:
+                print(f"{defender.name} defeated!")
+                attacker.gain_exp(40)
+                return defender
+
+        # ❗ Battle happened but no kill
+        attacker.gain_exp(10)
+        return None

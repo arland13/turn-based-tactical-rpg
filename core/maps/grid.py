@@ -132,6 +132,13 @@ class Grid:
             if enemies:
                 BattleSystem.battle(unit, enemies[0])
 
+    def unit_lose(self, unit):
+        row, col = self.unit_positions[unit]
+
+        if unit.hp <= 0:
+            self.tiles[row][col].remove_unit()
+            self.unit_positions.pop(unit)
+
 
     
 
