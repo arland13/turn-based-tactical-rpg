@@ -53,41 +53,6 @@ The goal is **understanding**, not authorship.
 
 ---
 
-## 🗂️ Project Structure
-
-├── combat/
-│ ├── battle.py # Combat resolution logic
-│ ├── faction_phase.py # Phase & faction system
-│
-├── entities/
-│ ├── character.py # Base character class
-│ ├── classes.py # Playable classes (e.g. Myrmidon)
-│
-├── items/
-│ ├── item.py # Abstract item base
-│ ├── consumables.py # Healing items
-│ ├── stat_boosters.py # Permanent stat items
-│ ├── item_list.py # Item factory / registry
-│
-├── maps/
-│ └── grid.py # Grid, tiles, movement & targeting
-│
-├── skills/
-│ ├── skill.py
-│ └── skill_lists.py
-│
-├── weapons/
-│ ├── weapon.py
-│ ├── weapon_types.py
-│ └── weapon_lists.py
-│
-├── player_phase.py
-├── enemy_phase.py
-├── helper_function.py
-├── main.py # Demo / test loop
-
----
-
 ## ▶️ How to Run
 
 ```bash
