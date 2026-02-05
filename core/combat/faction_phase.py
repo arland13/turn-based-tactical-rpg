@@ -25,6 +25,13 @@ class PhaseManager:
         else:
             self.current_phase = Phase.PLAYER
 
+def is_hostile(a, b):
+    if a == Faction.ENEMY and b in (Faction.PLAYER, Faction.ALLY):
+        return True
+    if b == Faction.ENEMY and a in (Faction.PLAYER, Faction.ALLY):
+        return True
+
+
 if __name__ == "__main__":
     phase_manager = PhaseManager()
     print(phase_manager)

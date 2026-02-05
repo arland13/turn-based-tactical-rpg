@@ -1,5 +1,5 @@
 from combat.battle import BattleSystem
-from combat.faction_phase import Faction
+from combat.faction_phase import Faction, is_hostile
 
 class Tile:
     def __init__(self):
@@ -109,7 +109,7 @@ class Grid:
                 continue
 
             # 🔑 FACTION CHECK
-            if unit.faction == attacker.faction:
+            if not is_hostile(attacker.faction, unit.faction):
                 continue
 
             distance = abs(ar - ur) + abs(ac - uc)

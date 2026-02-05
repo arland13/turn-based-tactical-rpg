@@ -27,10 +27,10 @@ if __name__ == "__main__":
     hero1.use_item(master_seal)
     print(hero1.show_stat())
 
-    hero2 = Myrmidon("Rika", "R", Faction.PLAYER, level= 10)
+    hero2 = Myrmidon("Rika", "R", Faction.ENEMY, level= 10)
     print(f"\n{hero2.show_stat()}")
 
-    enemy2 = Myrmidon("Indah", "I", Faction.ENEMY, level=10)
+    enemy2 = Myrmidon("Indah", "I", Faction.ALLY, level=10)
     print(f"\n{enemy2.show_stat()}")
     enemy3 = Myrmidon("Silvia", "S", Faction.ENEMY)
 
@@ -48,6 +48,7 @@ if __name__ == "__main__":
 
     enemy3.equip_weapon(weapon.iron_sword)
     enemy3.equip_class_skill(skill.ASTRA)
+    
     grid = Grid(10, 10)
     grid.place_unit(4, 4, hero1)
     grid.place_unit(1, 6, hero2)

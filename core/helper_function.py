@@ -1,4 +1,5 @@
 from combat.battle import BattleSystem
+from combat.faction_phase import is_hostile
 
 def manhattan(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
@@ -8,17 +9,15 @@ def find_closest_enemy(unit, grid):
 
     enemies = [
         u for u in grid.unit_positions
-        if u.faction != unit.faction
+        if is_hostile(unit.faction, u.faction)
     ]
 
     if not enemies:
         return None
 
     enemies.sort(
-        key=lambda e: manhattan(
-            (ux, uy),
-            grid.unit_positions[e]
-        )
+        key=lambda e: abs(ux - grid.unit_positions[e][0] +
+                      abs(uy - grid.unit_positions[e][1]))
     )
     return enemies[0]
 
